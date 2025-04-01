@@ -37,7 +37,7 @@ llm = pipeline("text-generation", model="microsoft/phi-2")
 # Initialize Smartify
 smart_llm = Smartify(llm)
 
-# Setting up prompt specific for phi2 model
+# Setting up prompt specific for phi2 model - NOTE ! {context} and {query) must be present in the prompt template. Refer to point 5 for more info.
 question =  "What is the real name of ishowspeed?"
 prompt_temp = """Instruct: {query) Answer based on this context: {context}
                  Output:		
@@ -67,11 +67,11 @@ With Smartify:
     
 -   `custom_context` (dict, optional): A dictionary containing predefined context to get context aware answers from model.
     
--   `max_context_tokens` (int, default=4000): Max token limit for context passed into LLM as prompt.
+-   `max_context_tokens` (int, default=4000): Max token limit for context passed into LLM.
     
 -   `buffer` (int, default=200): Buffer space to avoid overloading model.
     
--   `return_source` (bool, default=False): Whether to return source URLs.
+-   `return_source` (bool, default=False): Whether to return source URLs along with answer.
 
 
 ### 2. Text Splitting (Handling Large Documents)
@@ -146,7 +146,7 @@ print(web_data)
 
 -   `query` (str): The search query.
     
--   `num_results` (int, default=5): Number of search results to process.
+-   `num_results` (int, default=5): Number of search results to show.
     
 -   `paragraphs` (int, default=5): Number of paragraphs to extract per page.
     
@@ -154,7 +154,7 @@ print(web_data)
     
 -   `max_delay` (int, default=5): Max delay between requests.
     
--   `verify_ssl` (bool, default=True): Whether to verify SSL certificates.
+-   `verify_ssl` (bool, default=True): Whether to verify SSL certificates of websites.
     
 -   `region` (str, optional): Country-specific search filtering.
     
@@ -164,8 +164,9 @@ print(web_data)
 ```python
 from smartifyLLM import DEFAULT_PROMPT
 
+#or you can make a custom prompt of your own ; must have "{query}" and "{context}" inside the prompt
 custom_prompt = """
-Answer based on this context:
+Give me a summarized, Shakespearean answer based on this context:
 {context}
 
 Question: {query}
@@ -173,6 +174,7 @@ Answer:
 """
 
 ```
+**Note:** The placeholders `{context}` and `{query}` must be present in the custom prompt with the exact same spelling and case, or else an error will occur. The `smart_response` method expects `{context}` and `{query}` to be provided indefinitely by the user for proper functioning.
 
 # Functions & Methods (Detailed guide)
 
@@ -184,26 +186,26 @@ Here's a detailed breakdown of all available functions and methods in each modul
 
 Provides tools for creating vector embedding from documents, retrieving relevant information, and generating responses.
 
-- `vectordb_from_document(self, chunks: List[str]) -> None`
+- `vectordb_from_document(chunks: List[str]) -> None`
   - Converts a list of text chunks into a searchable vector database.
 
-- `_update_vectordb(self, texts: List[str]) -> None`
+- `_update_vectordb(texts: List[str]) -> None`
   - Updates the vector database with new embeddings.
 
-- `saveDB_to_disk(self, path: str) -> None`
+- `saveDB_to_disk(path: str) -> None`
   - Saves the vector database to disk as a `.pt` file.
   - **Parameters:** `path` (must end with `.pt`)
 
-- `loadDB_from_disk(self, path: str) -> None`
+- `loadDB_from_disk(path: str) -> None`
   - Loads a previously saved vector database from disk.
   - **Parameters:** `path` (must be an existing `.pt` file)
 
-- `retrieve(self, query: str, top_k: int = 3) -> List[Dict]`
+- `retrieve(query: str, top_k: int = 3) -> List[Dict]`
   - Retrieves the most relevant documents based on the input query.
   - **Parameters:** `query` (search term), `top_k` (number of results to return)
   - **Returns:** List of dictionaries containing content, similarity score, and ranking.
 
-- `generate(self, model_pipeline, query: str, **kwargs) -> str`
+- `generate(model_pipeline, query: str, **kwargs) -> str`
   - Generates a response based on retrieved documents.
   - **Parameters:** `model_pipeline` (language model function), `query` (input query)
   - **Returns:** A generated response.
@@ -219,7 +221,7 @@ Enhances responses by incorporating online search results and structured context
     - **args:**
          - Accepts the language model pipeline to be made smart.
 
-- `smart_response(self, query: str, custom_prompt: str = None, custom_context: Optional[Dict[str, str]] = None, max_context_tokens: int = 4000, buffer: int = 200, return_source: bool = False) -> Union[str, Tuple[str, List[str]]]`
+- `smart_response(query: str, custom_prompt: str = None, custom_context: Optional[Dict[str, str]] = None, max_context_tokens: int = 4000, buffer: int = 200, return_source: bool = False) -> Union[str, Tuple[str, List[str]]]`
   - Generates a smart response by retrieving the best available context (either online or from a given custom context).
   - **Parameters:**
     - `query`: The input question.
@@ -242,17 +244,17 @@ This module splits text documents into manageable chunks for better retrieval an
     - `chunk_size`: The number of words per chunk.
     - `chunk_overlap`: The number of overlapping words between chunks.
 
-- `split_text(self, text: str) -> List[str]`
+- `split_text(text: str) -> List[str]`
   - Splits a given raw text into chunks.
   - **Parameters:** `text` (string input to split)
   - **Returns:** A list of text chunks.
 
-- `split_pdf(self, pdf_path: str) -> List[str]`
+- `split_pdf(pdf_path: str) -> List[str]`
   - Extracts text from a PDF file and splits it into chunks.
   - **Parameters:** `pdf_path` (path to a `.pdf` file)
   - **Returns:** A list of text chunks.
 
-- `split_docx(self, docx_path: str) -> List[str]`
+- `split_docx(docx_path: str) -> List[str]`
   - Extracts text from a Word document and splits it into chunks.
   - **Parameters:** `docx_path` (path to a `.docx` file)
   - **Returns:** A list of text chunks.
