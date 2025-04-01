@@ -174,7 +174,7 @@ Answer:
 """
 
 ```
-**Note:** The placeholders `{context}` and `{query}` must be present in the custom prompt with the exact same spelling and case, or else an error will occur. The `smart_response` method expects `{context}` and `{query}` to be provided indefinitely by the user for proper functioning.
+**Note:** The placeholders `{context}` and `{query}` must be present in the custom prompt with the exact same spelling and case, or else an error will occur. The `smart_response` method expects `{context}` and `{query}` to be provided indefinitely by the user in the custom prompt for proper functioning.
 
 # Functions & Methods (Detailed guide)
 
