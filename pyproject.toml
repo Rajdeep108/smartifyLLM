@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "smartifyLLM"
 version = "0.1.0"
-description = "A package that enhances local LLMs with real-time web awareness and adaptive context retrieval—no retraining or fine-tuning required."
+description = "A package that enhances local LLMs with real-time web awareness and adaptive context retrieval, making them smarter with no retraining or fine-tuning."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Rajdeep Roshan Sahu"}]
