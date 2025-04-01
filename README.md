@@ -40,7 +40,7 @@ smart_llm = Smartify(llm)
 # Setting up prompt specific for phi2 model
 question =  "What is the real name of ishowspeed?"
 prompt_temp = """Instruct: {query) Answer based on this context: {context}
-        Output:		
+                Output:		
 			   """
 # Get an intelligent response
 response = smart_llm.smart_response(query=question,custom_prompt=prompt_temp)
