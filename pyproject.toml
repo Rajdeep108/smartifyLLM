@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "smartifyLLM"
-version = "0.1.0"
+version = "0.1.1"
 description = "A package that enhances local LLMs with real-time web awareness and adaptive context retrieval, making them smarter with no retraining or fine-tuning."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Rajdeep Roshan Sahu"}]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = [
     "torch==2.6.0",
     "python-docx==1.1.2",  
@@ -18,5 +18,6 @@ dependencies = [
     "fake-useragent==2.1.0",
     "sentence_transformers==3.4.1",
     "numpy==1.26.4",
-    "requests==2.32.3"
+    "requests==2.32.3",
+    "yfinance==0.2.55"
 ]

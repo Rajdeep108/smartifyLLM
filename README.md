@@ -12,6 +12,8 @@ SmartifyLLM is a Python package designed to make **local LLMs (Large Language Mo
 -   **Customizable Prompts:** Supports both predefined and user-defined prompts tailored to specific models and tasks.
     
 -   **Optimized Text Splitter:** Supports PDF, DOCX, and plain text processing.
+
+-   **Stock Market Data**: Get real-time stock prices. **(NEW UPDATE 🚩)**
     
 -   **Smart Search Ranking:** Uses semantic similarity to rank sources.
     
@@ -72,7 +74,24 @@ With Smartify:
 -   `buffer` (int, default=200): Buffer space to avoid overloading model.
     
 -   `return_source` (bool, default=False): Whether to return source URLs along with answer.
+-   `advanced_stockmrkt` **- New Parameter 🚩**
 
+| Parameter            | Type   | Default | Description                                                                 |
+|----------------------|--------|---------|-----------------------------------------------------------------------------|
+| `advanced_stockmrkt` | `bool` | `False` | If `True`, detects stock-related queries and returns real-time price data. |
+
+#### Example usage:
+
+```python
+question = "What is the price of Google stock today?"
+response = smart_llm.smart_response(query=question, advanced_stockmrkt=True)
+print(response)
+```
+##### Output:
+
+```
+The current price of Google stock (GOOG) is $147.74 (Source: Yahoo Finance).
+```
 
 ### 2. Text Splitting (Handling Large Documents)
 
@@ -303,6 +322,46 @@ These functions provide additional support for managing models and resources.
 - `clear_model_cache() -> None`
   - Clears all cached models to free up memory.
 
+## 6. Real-Time Stock Market Info (NEW FEATURE 🚨)
+
+SmartifyLLM now includes built-in support for **real-time stock price retrieval**.  
+Just set `advanced_stockmrkt=True`(default = False) in `smart_response`.
+
+
+#### Use Case:
+
+```python
+from smartifyLLM import Smartify
+from transformers import pipeline
+
+llm = pipeline("text-generation", model="gpt2")  # or any local model
+smart_llm = Smartify(llm)
+
+question = "What is the price of Google stock today?"
+response = smart_llm.smart_response(query=question, advanced_stockmrkt=True)
+print(response)
+```
+
+---
+
+### Output Example:
+
+```
+The current price of Google stock (GOOG) is $147.74 (Source: Yahoo Finance).
+```
+### Output Without Smartify: (Standard Local LLM Output)
+
+Local LLMs without access to real-time data may hallucinate or return outdated/incorrect values:
+
+```
+"What is the price of tesla stock today?"
+```
+**LLM output:**
+```
+"The price of tesla stock today is $1,895.00."
+```
+
+With Smartify and advanced_stockmrkt=True, you get real-time, accurate results.
 
 ## License
 
